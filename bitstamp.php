@@ -71,6 +71,8 @@ class Bitstamp
 				phpversion() . ')');
 		}
 		curl_setopt($ch, CURLOPT_URL, 'https://www.bitstamp.net/api/' . $path .'/');
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);  // man-in-the-middle defense by verifying ssl cert.
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);  // man-in-the-middle defense by verifying ssl cert.
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -140,6 +142,40 @@ class Bitstamp
 		
 	}
 
+	/**
+	* Bitstamp::balance()
+	*
+	*/
+	function balance(){
+		$balance = $this->bitstamp_query('balance');
+		$this->balance = $balance; // Another variable to contain it.
+		return $balance;
+	}
+
+
+	/**
+	* Bitstamp::unconfirmedbtc()
+	*
+	*/
+	function unconfirmedbtc(){
+		$unconfirmedbtc = $this->bitstamp_query('unconfirmed_btc');
+		$this->unconfirmedbtc = $unconfirmedbtc; // Another variable to contain it.
+		return $unconfirmedbtc;
+	}
+	
+	/**
+	* Bitstamp::bitcoindepositaddress()
+	*
+	*/
+	function bitcoindepositaddress(){
+		$bitcoindepositaddress = $this->bitstamp_query('bitcoin_deposit_address');
+		$this->bitcoindepositaddress = $bitcoindepositaddress; // Another variable to contain it.
+		return $bitcoindepositaddress;
+	}
+	
+	
+	
+	
 	
 	/**
 	* Bitstamp::get_signature()
@@ -155,4 +191,3 @@ class Bitstamp
 	  
 	}
 }
-
