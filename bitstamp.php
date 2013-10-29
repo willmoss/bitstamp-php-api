@@ -174,7 +174,7 @@ class Bitstamp
 	* @param int $id
 	*/
 	function cancelOrder($id=NULL){
-		if(is_null($price))
+		if(is_null($id))
 			throw new Exception('Order id is undefined');
 		return $this->bitstamp_query('cancel_order', array('id' => $id));
 	}
