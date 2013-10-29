@@ -81,7 +81,7 @@ class Bitstamp
 		if ($res === false)
 			throw new \Exception('Could not get reply: ' . curl_error($ch));
 		$dec = json_decode($res, true);
-		if (!$dec)
+		if (is_null($dec))
 			throw new \Exception('Invalid data received, please make sure connection is working and requested API exists');
 		return $dec;
 	}
