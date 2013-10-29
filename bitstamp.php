@@ -100,7 +100,7 @@ class Bitstamp
 	/**
 	 * Bitstamp::eurusd()
 	 * Returns current EUR/USD rate from Bitstamp
-	 * @return $ticker
+	 * @return $eurusd
 	 */
 	function eurusd() {
 		$eurusd = $this->bitstamp_query('eur_usd');
@@ -112,16 +112,17 @@ class Bitstamp
 	* Bitstamp::buyBTC()
 	*
 	* @param float $amount
+	* @param float $price
 	*/
-	function buyBTC($amount){
-	  
-	  if (!isset($ticker))
-	    $this->ticker();
-	  
-	  $ticker = $this->ticker;
-	  
-		return $this->bitstamp_query('buy', array('amount' => $amount, 'price' => $ticker['ask']));
+	function buyBTC($amount, $price=NULL){
+		if(is_null($price)){
+			if (!isset($this->ticker))
+				$this->ticker();
+
+			$price = $this->ticker['ask'];
+		}
 		
+		return $this->bitstamp_query('buy', array('amount' => $amount, 'price' => $price));
 	}
 
 	/**
@@ -129,17 +130,53 @@ class Bitstamp
 	*
 	* @param float $amount
 	* @param float $price
-	* @param string $currency
 	*/
-	function sellBTC($amount){
-	  
-	  if (!isset($ticker))
-	    $this->ticker();
-	  
-	  $ticker = $this->ticker;
-	  
-		return $this->bitstamp_query('sell', array('amount' => $amount, 'price' => $ticker['bid']));
+	function sellBTC($amount, $price=NULL){
+		if(is_null($price)){
+			if (!isset($this->ticker))
+				$this->ticker();
+
+			$price = $this->ticker['bid'];
+		}
 		
+		return $this->bitstamp_query('sell', array('amount' => $amount, 'price' => $price));
+	}
+
+	/**
+	* Bitstamp::transactions()
+	*
+	* @param string $time
+	*/
+	function transactions($time='hour'){
+		return $this->bitstamp_query('transactions', array('time' => $time));
+	}
+
+	/**
+	* Bitstamp::orderBook()
+	*
+	* @param int $group
+	*/
+	function orderBook($group=1){
+		return $this->bitstamp_query('order_book', array('group' => $group));
+	}
+
+	/**
+	* Bitstamp::openOrders()
+	* List of open orders
+	*/
+	function openOrders(){
+		return $this->bitstamp_query('open_orders');
+	}
+
+	/**
+	* Bitstamp::cancelOrder()
+	*
+	* @param int $id
+	*/
+	function cancelOrder($id=NULL){
+		if(is_null($price))
+			throw new Exception('Order id is undefined');
+		return $this->bitstamp_query('cancel_order', array('id' => $id));
 	}
 
 	/**
@@ -172,11 +209,7 @@ class Bitstamp
 		$this->bitcoindepositaddress = $bitcoindepositaddress; // Another variable to contain it.
 		return $bitcoindepositaddress;
 	}
-	
-	
-	
-	
-	
+
 	/**
 	* Bitstamp::get_signature()
 	* Compute bitstamp signature
