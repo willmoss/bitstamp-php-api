@@ -42,7 +42,7 @@ class Bitstamp
 	 * @param POST Data $req
 	 * @return Array containing data returned from the API path
 	 */
-	public function bitstamp_query($path, array $req = array())
+	public function bitstamp_query($path, array $req = array(), $verb = 'post')
 	{
 		// API settings
 		$key = $this->key;
@@ -55,7 +55,7 @@ class Bitstamp
 		
 		
 		// generate the POST data string
-		$post_data = http_build_query($req, '', '&');
+        $post_data = http_build_query($req, '', '&');
 
 		// any extra headers
 		$headers = array();
@@ -67,13 +67,16 @@ class Bitstamp
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_USERAGENT,
-				'Mozilla/4.0 (compatible; MtGox PHP client; ' . php_uname('s') . '; PHP/' .
+				'Mozilla/4.0 (compatible; MtGox PHP Client; ' . php_uname('s') . '; PHP/' .
 				phpversion() . ')');
 		}
 		curl_setopt($ch, CURLOPT_URL, 'https://www.bitstamp.net/api/' . $path .'/');
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);  // man-in-the-middle defense by verifying ssl cert.
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);  // man-in-the-middle defense by verifying ssl cert.
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        if ($verb == 'post')
+        {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        }
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 		// run the query
@@ -92,7 +95,7 @@ class Bitstamp
 	 * @return $ticker
 	 */
 	function ticker() {
-		$ticker = $this->bitstamp_query('ticker');
+		$ticker = $this->bitstamp_query('ticker', array(), 'get');
 		$this->ticker = $ticker; // Another variable to contain it.
 		return $ticker;
 	}
@@ -103,7 +106,7 @@ class Bitstamp
 	 * @return $eurusd
 	 */
 	function eurusd() {
-		$eurusd = $this->bitstamp_query('eur_usd');
+		$eurusd = $this->bitstamp_query('eur_usd', array(), 'get');
 		$this->eurusd = $eurusd; // Another variable to contain it.
 		return $eurusd;
 	}
@@ -148,7 +151,7 @@ class Bitstamp
 	* @param string $time
 	*/
 	function transactions($time='hour'){
-		return $this->bitstamp_query('transactions', array('time' => $time));
+		return $this->bitstamp_query('transactions', array('time' => $time), 'get');
 	}
 
 	/**
@@ -157,7 +160,7 @@ class Bitstamp
 	* @param int $group
 	*/
 	function orderBook($group=1){
-		return $this->bitstamp_query('order_book', array('group' => $group));
+		return $this->bitstamp_query('order_book', array('group' => $group), 'get');
 	}
 
 	/**
