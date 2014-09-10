@@ -53,4 +53,11 @@ We are constantly updating and improving our code. We hope it can be for the ben
 If you want to chat to us, connect to our website: [bxmediaus.com][bxmediaus]
 
 
-[bxmediaus]: https://bxmediaus.com
+[bxmediaus]: http://bxmediaus.com
+
+## License
+
+Released under MIT license
+
+http://opensource.org/licenses/MIT
+
