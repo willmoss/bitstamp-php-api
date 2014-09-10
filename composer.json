@@ -1,0 +1,17 @@
+{
+    "name": "willmoss/bitstamp-php-api",
+    "description": "Bitstamp PHP API",
+    "authors": [
+        {
+            "name": "willmoss"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": {
+            "Bitstamp": "src/"
+        }
+    }
+}

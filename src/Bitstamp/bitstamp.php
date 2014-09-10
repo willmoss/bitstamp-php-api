@@ -1,4 +1,4 @@
-<?php
+<?php namespace Bitstamp;
 
 /**
  * @package Bitstamp API
